@@ -35,5 +35,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/comment',[CommentController::class, 'store']);
     Route::get('/comment/{comment}',[CommentController::class, 'show']);
     Route::put('/comment',[CommentController::class, 'update']);
-    Route::delete('/comment',[CommentController::class, 'destroy']);
+    Route::delete('/comment/{comment}',[CommentController::class, 'destroy']);
 });
