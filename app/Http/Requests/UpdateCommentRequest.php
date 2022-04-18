@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddGalleryRequest extends FormRequest
+class UpdateCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,8 @@ class AddGalleryRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|min:2|max:255',
-            'description' => 'max:1000',
-            'images_url' => 'array',
-            'images_url.*' => 'required|string|distinct|ends_with:jpg,jpeg,png',
-            'user_id' => 'required|integer|exists:users,id',
+            'id' => 'required',
+            'body' => 'sometimes|required|string|max:1000',
         ];
     }
 }

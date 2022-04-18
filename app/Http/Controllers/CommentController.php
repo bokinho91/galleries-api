@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\StoreCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 class CommentController extends Controller
 {
     /**
@@ -14,7 +15,9 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $allComments = Comment::all();
+
+        return response()->json($allComments);
     }
 
     /**
@@ -23,9 +26,11 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCommentRequest $request)
     {
-        //
+        $data = $request->validated();
+        $newComment = Comment::create($data);
+        return $newComment;
     }
 
     /**
@@ -36,7 +41,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        return response()->json($comment);
     }
 
     /**
@@ -46,9 +51,15 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(UpdateCommentRequest $request)
     {
-        //
+        $data = $request->validated();
+        $commentToUpdate= Comment::findOrFail($data['id']);
+    
+        $commentToUpdate->body= $data['body'];
+        $commentToUpdate->save();
+
+        return response()->json($commentToUpdate);
     }
 
     /**
