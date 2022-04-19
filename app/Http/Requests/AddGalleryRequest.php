@@ -28,7 +28,6 @@ class AddGalleryRequest extends FormRequest
             'description' => 'max:1000',
             'images_url' => 'array',
             'images_url.*' => 'required|string|distinct|ends_with:jpg,jpeg,png',
-            'user_id' => 'required|integer|exists:users,id',
         ];
     }
 }

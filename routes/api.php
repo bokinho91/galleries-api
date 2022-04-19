@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GalleryController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,12 +20,13 @@ use Illuminate\Support\Facades\Route;
 //Public route
 Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
+Route::get('/gallery',[GalleryController::class, 'index'])->middleware('guest');
 
 
 //Private routes
 Route::middleware('auth')->group(function () {
     //Gallery
-    Route::get('/gallery',[GalleryController::class, 'index']);
+    Route::get('/mygallery', [GalleryController::class, 'myGalleries']);
     Route::post('/gallery',[GalleryController::class, 'store']);
     Route::get('/gallery/{gallery}',[GalleryController::class, 'show']);
     Route::put('/gallery',[GalleryController::class, 'update']);

@@ -6,7 +6,8 @@ use App\Models\Gallery;
 use Illuminate\Http\Request;
 use App\Http\Requests\AddGalleryRequest;
 use App\Http\Requests\UpdateGalleryRequest;
-
+use App\Models\Image;
+use Illuminate\Support\Facades\Auth;
 class GalleryController extends Controller
 {
     /**
@@ -16,10 +17,21 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        $galleries = Gallery::with('comments')->get();
+  
+        $galleries = Gallery::with('comments','images', 'user')->get();
 
         return response()->json($galleries);
     }
+
+
+    public function myGalleries()
+    {
+  
+        $galleries = Auth::user()->galleries()->get();
+
+        return response()->json($galleries);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -29,13 +41,13 @@ class GalleryController extends Controller
      */
     public function store(AddGalleryRequest $request)
     {
-        
         $data = $request->validated();
-        $data['images_url'] = serialize($data['images_url']);
-        
-        $newGallery = Gallery::create($data);
+         
+       $gallery = Auth::user()->galleries()->create($data);
 
-        return response()->json($newGallery);
+       foreach ($request->images_url as $imageUrl) {
+        $gallery->images()->create(['image_url' => $imageUrl]);
+      }
     }
 
     /**

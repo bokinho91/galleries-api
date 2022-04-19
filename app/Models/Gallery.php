@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Comment;
 use App\Models\User;
+use App\Models\Image;
 
 class Gallery extends Model
 {
@@ -16,8 +17,6 @@ class Gallery extends Model
     protected $fillable = [
         'title',
         'description',
-        'images_url',
-        'user_id',
     ];
 
 
@@ -28,6 +27,10 @@ class Gallery extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function images(){
+        return $this->hasMany(Image::class);
     }
 
 }
