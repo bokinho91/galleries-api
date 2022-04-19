@@ -48,6 +48,8 @@ class GalleryController extends Controller
        foreach ($request->images_url as $imageUrl) {
         $gallery->images()->create(['image_url' => $imageUrl]);
       }
+
+      return response()->json($gallery);
     }
 
     /**
@@ -57,9 +59,10 @@ class GalleryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Gallery $gallery)
-    {
-        $gallery['images_url'] = unserialize($gallery['images_url']);
-        return response()->json($gallery);
+    {   
+
+        $data= Gallery::with('user','comments','images')->where('id',$gallery->id)->first();
+        return response()->json($data);
     }
 
     /**
