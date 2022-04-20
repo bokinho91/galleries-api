@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 //Public route
 Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
-Route::get('/gallery',[GalleryController::class, 'index'])->middleware('guest');
+Route::get('/gallery',[GalleryController::class, 'index']);
 
 
 //Private routes
