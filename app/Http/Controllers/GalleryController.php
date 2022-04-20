@@ -19,7 +19,7 @@ class GalleryController extends Controller
     public function index()
     {
   
-        $galleries = Gallery::with('comments','images', 'user')->get();
+        $galleries = Gallery::with('comments','images', 'user')->paginate(10);
 
         return response()->json($galleries);
     }
@@ -28,7 +28,8 @@ class GalleryController extends Controller
     public function myGalleries()
     {
   
-        $galleries = Auth::user()->galleries()->get();
+        $userId= Auth::user()->id;
+        $galleries = Gallery::with('comments','images', 'user')->where('user_id',$userId)->paginate(10);
 
         return response()->json($galleries);
     }

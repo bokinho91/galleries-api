@@ -25,6 +25,9 @@ Route::get('/gallery',[GalleryController::class, 'index']);
 
 //Private routes
 Route::middleware('auth')->group(function () {
+    //My profile
+    Route::get('/myprofile',[AuthController::class, 'me']);
+
     //Gallery
     Route::get('/mygallery', [GalleryController::class, 'myGalleries']);
     Route::post('/gallery',[GalleryController::class, 'store']);
