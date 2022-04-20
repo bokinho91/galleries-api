@@ -8,6 +8,7 @@ use App\Http\Requests\AddGalleryRequest;
 use App\Http\Requests\UpdateGalleryRequest;
 use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Comment;
 class GalleryController extends Controller
 {
     /**
@@ -61,7 +62,7 @@ class GalleryController extends Controller
     public function show(Gallery $gallery)
     {   
 
-        $data= Gallery::with('user','comments','images')->where('id',$gallery->id)->first();
+        $data= Gallery::with('user','images')->where('id',$gallery->id)->first();
         return response()->json($data);
     }
 

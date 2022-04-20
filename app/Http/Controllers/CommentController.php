@@ -6,6 +6,9 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Gallery;
+
 class CommentController extends Controller
 {
     /**
@@ -15,9 +18,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $allComments = Comment::all();
 
-        return response()->json($allComments);
     }
 
     /**
@@ -29,7 +30,7 @@ class CommentController extends Controller
     public function store(StoreCommentRequest $request)
     {
         $data = $request->validated();
-        $newComment = Comment::create($data);
+        $newComment = Auth::user()->comments()->create($data);
         return $newComment;
     }
 
@@ -39,9 +40,10 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show(Gallery $gallery)
     {
-        return response()->json($comment);
+        $galleryComments = Comment::with('user')->where('gallery_id', $gallery->id)->get();
+        return response()->json($galleryComments);
     }
 
     /**
