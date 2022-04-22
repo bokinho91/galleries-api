@@ -16,20 +16,29 @@ class GalleryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-  
-        $galleries = Gallery::with('comments','images', 'user')->paginate(10);
+        $pageNumber = $request->query('page_number', 0);
+        $galleries = Gallery::with('comments','images', 'user')->skip($pageNumber*10)->take(10)->get();
+        return response()->json($galleries);
+    }
+
+
+    public function myGalleries(Request $request)
+    {
+        $pageNumber = $request->query('page_number', 0);
+        $userId= Auth::id();
+        $galleries = Gallery::with('comments','images', 'user')->where('user_id',$userId)->skip($pageNumber*10)->take(10)->get();
 
         return response()->json($galleries);
     }
 
 
-    public function myGalleries()
+    public function authorsGalleries(Request $request)
     {
-  
-        $userId= Auth::user()->id;
-        $galleries = Gallery::with('comments','images', 'user')->where('user_id',$userId)->paginate(10);
+        $pageNumber = $request->query('page_number', 0);
+        $userId= $request->query('author_id');
+        $galleries = Gallery::with('comments','images', 'user')->find($userId)->skip($pageNumber*10)->take(10)->get();
 
         return response()->json($galleries);
     }
@@ -47,6 +56,7 @@ class GalleryController extends Controller
          
        $gallery = Auth::user()->galleries()->create($data);
 
+    //    createMany
        foreach ($request->images_url as $imageUrl) {
         $gallery->images()->create(['image_url' => $imageUrl]);
       }
@@ -62,9 +72,9 @@ class GalleryController extends Controller
      */
     public function show(Gallery $gallery)
     {   
-
-        $data= Gallery::with('user','images')->where('id',$gallery->id)->first();
-        return response()->json($data);
+        $gallery->load('user', 'images');
+        // $data= Gallery::with('user','images')->where('id',$gallery->id)->first();
+        return response()->json($gallery);
     }
 
     /**

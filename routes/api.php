@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 //Public route
 Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
-Route::get('/gallery',[GalleryController::class, 'index']);
+Route::get('/galleries',[GalleryController::class, 'index']);
+// Route::get('/load_more/{pageNumber}',[GalleryController::class, 'loadMore']);
 
 
 //Private routes
@@ -29,16 +30,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/myprofile',[AuthController::class, 'me']);
 
     //Gallery
-    Route::get('/mygallery', [GalleryController::class, 'myGalleries']);
-    Route::post('/gallery',[GalleryController::class, 'store']);
-    Route::get('/gallery/{gallery}',[GalleryController::class, 'show']);
-    Route::put('/gallery',[GalleryController::class, 'update']);
-    Route::delete('/gallery/{gallery}',[GalleryController::class, 'destroy']);
-
+    Route::get('/my_galleries', [GalleryController::class, 'myGalleries']);
+    Route::get('/authors', [GalleryController::class, 'authorsGalleries']);
+    Route::post('/galleries',[GalleryController::class, 'store']);
+    Route::get('/galleries/{gallery}',[GalleryController::class, 'show']);
+    Route::put('/galleries',[GalleryController::class, 'update']);
+    Route::delete('/galleries/{gallery}',[GalleryController::class, 'destroy']);
+    
+    
     //Comments
-    Route::get('/comment',[CommentController::class, 'index']);
-    Route::post('/comment',[CommentController::class, 'store']);
-    Route::get('/comment/{gallery}',[CommentController::class, 'show']);
-    Route::put('/comment',[CommentController::class, 'update']);
-    Route::delete('/comment/{comment}',[CommentController::class, 'destroy']);
+    Route::get('/comments',[CommentController::class, 'index']);
+    Route::post('/comments',[CommentController::class, 'store']);
+    Route::get('/comments/{gallery}',[CommentController::class, 'show']);
+    Route::put('/comments',[CommentController::class, 'update']);
+    Route::delete('/comments/{comment}',[CommentController::class, 'destroy']);
 });
