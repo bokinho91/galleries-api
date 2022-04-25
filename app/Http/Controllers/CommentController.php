@@ -31,7 +31,7 @@ class CommentController extends Controller
     {
         $data = $request->validated();
         $newComment = Auth::user()->comments()->create($data);
-        return $newComment;
+        return $newComment->load('user');
     }
 
     /**

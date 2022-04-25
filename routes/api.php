@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/galleries',[GalleryController::class, 'index']);
-// Route::get('/load_more/{pageNumber}',[GalleryController::class, 'loadMore']);
 
 
 //Private routes

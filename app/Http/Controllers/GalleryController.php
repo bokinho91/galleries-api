@@ -38,7 +38,7 @@ class GalleryController extends Controller
     {
         $pageNumber = $request->query('page_number', 0);
         $userId= $request->query('author_id');
-        $galleries = Gallery::with('comments','images', 'user')->find($userId)->skip($pageNumber*10)->take(10)->get();
+        $galleries = Gallery::with('comments','images', 'user')->where('user_id', $userId)->skip($pageNumber*10)->take(10)->get();
 
         return response()->json($galleries);
     }
@@ -61,7 +61,7 @@ class GalleryController extends Controller
         $gallery->images()->create(['image_url' => $imageUrl]);
       }
 
-      return response()->json($gallery);
+      return response()->json($gallery->load('user', 'images'));
     }
 
     /**
@@ -86,14 +86,11 @@ class GalleryController extends Controller
      */
     public function update(UpdateGalleryRequest $request)
     {
+        
         $data = $request->validated();
         $galleryToUpdate= Gallery::findOrFail($data['id']);
-        $data['images_url'] = serialize($data['images_url']);
-    
-        $galleryToUpdate->title= $data['title'];
-        $galleryToUpdate->description= $data['description'];
-        $galleryToUpdate->images_url= $data['images_url'];
-        $galleryToUpdate->save();
+        
+        $galleryToUpdate->images()->update($data);
 
         return response()->json($galleryToUpdate);
     }
