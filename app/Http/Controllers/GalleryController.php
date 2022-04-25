@@ -56,7 +56,7 @@ class GalleryController extends Controller
          
        $gallery = Auth::user()->galleries()->create($data);
 
-    //    createMany
+    
        foreach ($request->images_url as $imageUrl) {
         $gallery->images()->create(['image_url' => $imageUrl]);
       }
@@ -72,8 +72,8 @@ class GalleryController extends Controller
      */
     public function show(Gallery $gallery)
     {   
-        $gallery->load('user', 'images');
-        // $data= Gallery::with('user','images')->where('id',$gallery->id)->first();
+        $gallery->load('user','images');
+        //$data= Gallery::with(['user','images'])->where('id',$gallery->id)->first();
         return response()->json($gallery);
     }
 
@@ -86,13 +86,16 @@ class GalleryController extends Controller
      */
     public function update(UpdateGalleryRequest $request)
     {
-        
         $data = $request->validated();
-        $galleryToUpdate= Gallery::findOrFail($data['id']);
+        $gallery= Gallery::find($request['id']);
+        $gallery->update($data);
         
-        $galleryToUpdate->images()->update($data);
 
-        return response()->json($galleryToUpdate);
+        foreach ($request->images_url as $imageUrl) {
+            $gallery->images()->updateOrCreate(['image_url' => $imageUrl]);
+        }
+
+        return response()->json($gallery->load('user','comments','images'));
     }
 
     /**

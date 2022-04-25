@@ -24,7 +24,6 @@ class UpdateGalleryRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|integer',
             'title' => 'sometimes|required|string|min:2|max:255',
             'description' => 'sometimes|max:1000',
             'images_url' => 'sometimes|array',

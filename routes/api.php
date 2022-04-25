@@ -41,6 +41,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/comments',[CommentController::class, 'index']);
     Route::post('/comments',[CommentController::class, 'store']);
     Route::get('/comments/{gallery}',[CommentController::class, 'show']);
-    Route::put('/comments',[CommentController::class, 'update']);
     Route::delete('/comments/{comment}',[CommentController::class, 'destroy']);
 });
